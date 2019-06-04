@@ -10,6 +10,10 @@
 </head>
 <body style="font-size:20px; padding:50px;">
     <!-- Add EJS code here -->
+<header>
+  <% include partials/_header %>
+</header>
+  <h5>Examples</h5>
     <ul>
       <% for (var x in urls) {%>
       <li><a href='#'><%= x %>: <%= urls[x] %></a></li>
