@@ -9,10 +9,6 @@ let urlDatabase = {
   '9sm5xK': 'http://www.google.com'
 };
 
-app.get('/urls', (req, res) => {
-  let templateVars = { urls: urlDatabase };
-  res.render('urls_index', templateVars);
-});
 
 app.get('/', (req, res) => {
   res.send('Hello!');
@@ -20,6 +16,16 @@ app.get('/', (req, res) => {
 
 app.get('/urls.json', (req, res) => {
   res.json(urlDatabase);
+});
+
+app.get('/urls', (req, res) => {
+  let templateVars = { urls: urlDatabase };
+  res.render('urls_index', templateVars);
+});
+
+app.get('/urls/:shortURL', (req, res) => {
+  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
+  res.render('urls_show', templateVars);
 });
 
 app.get('/hello', (req, res) => {
