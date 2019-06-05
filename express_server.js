@@ -54,6 +54,12 @@ app.post('/urls', (req, res) => {
 
 /* POST ROUTES */
 
+// Handles sign-in
+app.post('/login', (req, res) => {
+  res.cookie('username', req.body.username);
+  res.redirect('/urls')
+});
+
 // Handles a DELETE request
 app.post('/urls/:shortURL/delete', (req, res) => {
   delete urlDatabase[req.params.shortURL];
