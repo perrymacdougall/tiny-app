@@ -39,10 +39,11 @@ app.get('/urls/:shortURL', (req, res) => {
   res.render('urls_show', templateVars);
 });
 
-// Handle POST requests
+// Handles POST requests, generates a random alphanumeric string and writes the short/long pair to the urlDatabase
 app.post('/urls', (req, res) => {
-  console.log(req.body);
-  res.send('Ok');
+  let randomString = generateRandomString();
+  urlDatabase[randomString] = req.body.longURL;
+  res.redirect(`urls/${randomString}`);
 });
 
 function generateRandomString() {
