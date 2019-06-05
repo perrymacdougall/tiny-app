@@ -14,7 +14,8 @@
   <% include partials/_header %>
 </header>
 
-    <p><%= shortURL %></p>
     <p><%= longURL %><t/p>
+
+    <a href="<%= `/u/${shortURL}` %>"><%= shortURL %></a>
 </body>
 </html>
