@@ -16,7 +16,8 @@ let urlDatabase = {
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended: true}));
 
-// Defining routes for incoming requests
+/* GET ROUTES */
+
 app.get('/', (req, res) => {
   res.send('Hello!');
 });
@@ -51,12 +52,22 @@ app.post('/urls', (req, res) => {
   res.redirect(`urls/${randomString}`);
 });
 
-// Handles a POST request (DELETE)
+/* POST ROUTES */
+
+// Handles a DELETE request
 app.post('/urls/:shortURL/delete', (req, res) => {
   delete urlDatabase[req.params.shortURL];
   res.redirect('/urls')
 });
 
+// Updates the URL of an existing link
+app.post('/urls/:id', (req, res) => {
+  console.log(req.params, req.body);
+  urlDatabase[req.params.id] = req.body.longURL;
+  res.redirect('/urls')
+});
+
+// 6-character UID generator
 function generateRandomString() {
   return Math.floor((1 + Math.random()) * 0x10000000).toString(36);
 };
