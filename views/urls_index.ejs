@@ -13,13 +13,19 @@
 <header>
   <% include partials/_header %>
 </header>
-  <h5>Examples</h5>
+  <h6>Examples</h6>
     <ul>
       <% for (var x in urls) {%>
-      <li><a href='#'><%= x %>: <%= urls[x] %></a></li>
+        <li><%= x %>: <a href='#'><%= urls[x] %></a>
+          <form action="/urls/<%= x %>/delete" method="POST">
+            <button type="submit">Delete</button>
+          </form>
+        </li>
       <% }; %>
     </ul>
 
     <a href="#">Shorten a link!</a>
+
+
 </body>
 </html>

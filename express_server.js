@@ -51,6 +51,12 @@ app.post('/urls', (req, res) => {
   res.redirect(`urls/${randomString}`);
 });
 
+// Handles a POST request (DELETE)
+app.post('/urls/:shortURL/delete', (req, res) => {
+  delete urlDatabase[req.params.shortURL];
+  res.redirect('/urls')
+});
+
 function generateRandomString() {
   return Math.floor((1 + Math.random()) * 0x10000000).toString(36);
 };
