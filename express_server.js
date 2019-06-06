@@ -11,6 +11,19 @@ let urlDatabase = {
   'b2xVn2': 'http://www.lighthouselabs.ca',
   '9sm5xK': 'http://www.google.com'
 };
+// Object containing my data store of users
+const users = {
+  "userRandomID": {
+    id: "userRandomID",
+    email: "user@example.com",
+    password: "purple-monkey-dinosaur"
+  },
+ "user2RandomID": {
+    id: "user2RandomID",
+    email: "user2@example.com",
+    password: "dishwasher-funk"
+  }
+}
 
 // Requires body-parser
 const bodyParser = require('body-parser');
@@ -61,7 +74,12 @@ app.get('/u/:shortURL', (req, res) => {
 });
 
 app.get('/register', (req, res) => {
-  res.redirect('urls_registration.ejs');
+  let templateVars = {
+    shortURL: req.params.shortURL,
+    longURL: urlDatabase[req.params.shortURL],
+    cookieName: req.cookies.username
+  };
+  res.render('urls_registration', templateVars);
 });
 
 /*---- POST ROUTES -----*/
@@ -72,7 +90,6 @@ app.post('/urls', (req, res) => {
   urlDatabase[randomString] = req.body.longURL;
   res.redirect(`urls/${randomString}`);
 });
-
 
 // Handles login
 app.post('/login', (req, res) => {
@@ -96,6 +113,20 @@ app.post('/urls/:shortURL/delete', (req, res) => {
 app.post('/urls/:id', (req, res) => {
   console.log(req.params, req.body);
   urlDatabase[req.params.id] = req.body.longURL;
+  res.redirect('/urls')
+});
+
+// Handles registration requests and creates a new user
+app.post('/register', (req, res) => {
+  // Creates a new user object from registration form data
+  const newUser = generateRandomString();
+
+  users[newUser] = {
+    id: newUser,
+    email: req.body.email,
+    password: req.body.password
+  }
+
   res.redirect('/urls')
 });
 
