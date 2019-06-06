@@ -46,14 +46,14 @@ app.get('/urls.json', (req, res) => {
 app.get('/urls', (req, res) => {
   let templateVars = {
     urls: urlDatabase,
-    cookieName: req.cookies.username
+    cookieName: users[req.cookies.user_id]
   };
   res.render('urls_index', templateVars);
 });
 
 app.get('/urls/new', (req, res) => {
   let templateVars = {
-    cookieName: req.cookies.username
+    cookieName: users[req.cookies.user_id]
   }
   res.render('urls_new', templateVars);
 });
@@ -62,7 +62,7 @@ app.get('/urls/:shortURL', (req, res) => {
   let templateVars = {
     shortURL: req.params.shortURL,
     longURL: urlDatabase[req.params.shortURL],
-    cookieName: req.cookies.username
+    cookieName: users[req.cookies.user_id]
   };
   res.render('urls_show', templateVars);
 });
@@ -77,7 +77,7 @@ app.get('/register', (req, res) => {
   let templateVars = {
     shortURL: req.params.shortURL,
     longURL: urlDatabase[req.params.shortURL],
-    cookieName: req.cookies.username
+    cookieName: users[req.cookies.user_id]
   };
   res.render('urls_registration', templateVars);
 });
