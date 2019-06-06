@@ -127,7 +127,7 @@ app.post('/login', (req, res) => {
     res.cookie('user_id', userExists.id);
     res.redirect('/urls')
   } else {
-    res.send('Sorry, couldn\'t you find you in our pseudo-database')
+    res.send('Error 403: Sorry, couldn\'t you find you in our pseudo-database')
   }
 });
 
