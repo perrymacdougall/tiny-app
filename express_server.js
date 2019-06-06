@@ -44,7 +44,7 @@ function generateRandomString() {
 const emailLookup = function(email) {
   for (var user in users) {
     if (users[user].email === email) {
-      return users[user].id;
+      return users[user];
     }
   };
   return null;
@@ -123,8 +123,8 @@ app.post('/login', (req, res) => {
   //Checks to see if user exists
   let userExists = emailLookup(req.body.email);
   // Creates a cookie for returning user
-  if (userExists) {
-    res.cookie('user_id', userExists);
+  if (userExists && userExists.password === req.body.password) {
+    res.cookie('user_id', userExists.id);
     res.redirect('/urls')
   } else {
     res.send('Sorry, couldn\'t you find you in our pseudo-database')
