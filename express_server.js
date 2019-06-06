@@ -118,6 +118,12 @@ app.post('/urls/:id', (req, res) => {
 
 // Handles registration requests and creates a new user
 app.post('/register', (req, res) => {
+
+  // Checks if email and password are valid
+  if (req.body.email === "" || req.body.password === "") {
+    res.send("Error 400: Please make sure your email address and password are valid");
+  }
+
   // Creates a new user object from registration form data
   const newUser = generateRandomString();
 
@@ -127,13 +133,22 @@ app.post('/register', (req, res) => {
     password: req.body.password
   }
 
+  // Create a new cookie for new user
+  res.cookie('user_id', users[newUser].id);
   res.redirect('/urls')
 });
+
+/*---- HELPER FUNCTIONS ------*/
 
 // 6-character UID generator
 function generateRandomString() {
   return Math.floor((1 + Math.random()) * 0x10000000).toString(36);
 };
+
+// Email lookup function
+// function emailLookup(userID) {
+//   return (users[userID].email);
+// };
 
 // Tells the HTTP server to listen for requests on the port number defined at top
 app.listen(PORT, () => {
