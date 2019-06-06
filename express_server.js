@@ -82,6 +82,15 @@ app.get('/register', (req, res) => {
   res.render('urls_registration', templateVars);
 });
 
+app.get('/login', (req, res) => {
+  let templateVars = {
+    shortURL: req.params.shortURL,
+    longURL: urlDatabase[req.params.shortURL],
+    cookieName: users[req.cookies.user_id]
+  };
+  res.render('urls_login', templateVars);
+});
+
 /*---- POST ROUTES -----*/
 
 // Handles POST requests, generates a random alphanumeric string and writes the short/long pair to the urlDatabase
