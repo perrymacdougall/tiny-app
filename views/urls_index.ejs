@@ -1,21 +1,21 @@
-<!-- Add EJS code here -->
-<% include partials/_head %>
-  <header>
-    <% include partials/_header %>
-  </header>
-  <h6>Your URLs</h6>
-    <ul>
-      <% for (var x in urls) {%>
-        <li><%= x %>: <a href='#'><%= urls[x] %></a>
-          <form action="/urls/<%= x %>/delete" method="POST">
-            <button type="submit">Delete</button>
-          </form>
-        </li>
-      <% }; %>
-    </ul>
+  <!-- Add EJS code here -->
+  <% include partials/_head %>
+    <header>
+      <% include partials/_header %>
+    </header>
+    <h6>Your URLs</h6>
+      <ul>
+        <% for (var x in urls) {%>
+          <li><%= x %>: <a href='#'><%= urls[x] %></a>
+            <form action="/urls/<%= x %>/delete" method="POST">
+              <button type="submit">Delete</button>
+            </form>
+          </li>
+        <% }; %>
+      </ul>
 
-  <a href="/urls/new">Shorten a link!</a>
+    <a href="/urls/new">Shorten a link!</a>
 
 
-</body>
+  </body>
 </html>

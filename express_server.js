@@ -54,10 +54,14 @@ app.get('/urls/:shortURL', (req, res) => {
   res.render('urls_show', templateVars);
 });
 
-// Handles final redirect request
+// Handles outbound redirect request
 app.get('/u/:shortURL', (req, res) => {
   const final = (urlDatabase[req.params.shortURL]);
   res.redirect(final);
+});
+
+app.get('/register', (req, res) => {
+  res.redirect('urls_registration.ejs');
 });
 
 /*---- POST ROUTES -----*/
