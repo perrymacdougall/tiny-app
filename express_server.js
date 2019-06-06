@@ -33,6 +33,23 @@ app.use(bodyParser.urlencoded({extended: true}));
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
+/*---- HELPER FUNCTIONS ------*/
+
+// 6-character UID generator
+function generateRandomString() {
+  return Math.floor((1 + Math.random()) * 0x10000000).toString(36);
+};
+
+// Email lookup function
+const emailLookup = function(email) {
+  for (var user in users) {
+    if (users[user].email === email) {
+      return users[user].id;
+    }
+  };
+  return null;
+};
+
 /*----- GET ROUTES ------*/
 
 app.get('/', (req, res) => {
@@ -102,13 +119,21 @@ app.post('/urls', (req, res) => {
 
 // Handles login
 app.post('/login', (req, res) => {
-  res.cookie('username', req.body.username);
-  res.redirect('/urls')
+
+  //Checks to see if user exists
+  let userExists = emailLookup(req.body.email);
+  // Creates a cookie for returning user
+  if (userExists) {
+    res.cookie('user_id', userExists);
+    res.redirect('/urls')
+  } else {
+    res.send('Sorry, couldn\'t you find you in our pseudo-database')
+  }
 });
 
 // Handles logout
 app.post('/logout', (req, res) => {
-  res.clearCookie('username');
+  res.clearCookie('user_id');
   res.redirect('/urls')
 });
 
@@ -120,7 +145,6 @@ app.post('/urls/:shortURL/delete', (req, res) => {
 
 // Updates the URL of an existing link
 app.post('/urls/:id', (req, res) => {
-  console.log(req.params, req.body);
   urlDatabase[req.params.id] = req.body.longURL;
   res.redirect('/urls')
 });
@@ -133,31 +157,24 @@ app.post('/register', (req, res) => {
     res.send("Error 400: Please make sure your email address and password are valid");
   }
 
-  // Creates a new user object from registration form data
-  const newUser = generateRandomString();
+  // Checks to see if user already exists
+  if (emailLookup(req.body.email)) {
+    res.send("Hmm...it seems you already exist");
+  } else {
+    // If user ,doesn't exist, creates a new user object from registration form data
+    const newUser = generateRandomString();
 
-  users[newUser] = {
-    id: newUser,
-    email: req.body.email,
-    password: req.body.password
+    users[newUser] = {
+      id: newUser,
+      email: req.body.email,
+      password: req.body.password
+    }
+
+    // Create a new cookie for new user
+    res.cookie('user_id', users[newUser].id);
+    res.redirect('/urls')
   }
-
-  // Create a new cookie for new user
-  res.cookie('user_id', users[newUser].id);
-  res.redirect('/urls')
 });
-
-/*---- HELPER FUNCTIONS ------*/
-
-// 6-character UID generator
-function generateRandomString() {
-  return Math.floor((1 + Math.random()) * 0x10000000).toString(36);
-};
-
-// Email lookup function
-// function emailLookup(userID) {
-//   return (users[userID].email);
-// };
 
 // Tells the HTTP server to listen for requests on the port number defined at top
 app.listen(PORT, () => {
