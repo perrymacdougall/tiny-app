@@ -1,18 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-  <title>TinyApp</title>
-</head>
-<body style="font-size:20px; padding:50px;">
-    <!-- Add EJS code here -->
-<header>
-  <% include partials/_header %>
-</header>
+<!-- Add EJS code here -->
+<% include partials/_head %>
+  <header>
+    <% include partials/_header %>
+  </header>
   <h6>Your URLs</h6>
     <ul>
       <% for (var x in urls) {%>
@@ -24,7 +14,7 @@
       <% }; %>
     </ul>
 
-    <a href="/urls/new">Shorten a link!</a>
+  <a href="/urls/new">Shorten a link!</a>
 
 
 </body>
