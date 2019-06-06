@@ -7,21 +7,22 @@ const PORT = 8080; // default port 8080
 app.set('view engine', 'ejs');
 
 // Object containing key:value pairs of URLs and their shortened counterparts
-let urlDatabase = {
-  'b2xVn2': 'http://www.lighthouselabs.ca',
-  '9sm5xK': 'http://www.google.com'
+const urlDatabase = {
+  'b2xVn2': { longURL: 'http://www.lighthouselabs.ca', userID: "userRandomID" },
+  '9sm5xK': { longURL: 'http://www.google.com', userID: "user2RandomID"}
 };
+
 // Object containing my data store of users
 const users = {
   "userRandomID": {
     id: "userRandomID",
     email: "user@example.com",
-    password: "purple-monkey-dinosaur"
+    password: "purple"
   },
  "user2RandomID": {
     id: "user2RandomID",
     email: "user2@example.com",
-    password: "dishwasher-funk"
+    password: "dishwasher"
   }
 }
 
@@ -42,7 +43,7 @@ function generateRandomString() {
 
 // Email lookup function
 const emailLookup = function(email) {
-  for (var user in users) {
+  for (let user in users) {
     if (users[user].email === email) {
       return users[user];
     }
@@ -50,19 +51,29 @@ const emailLookup = function(email) {
   return null;
 };
 
+// Filters URLs according to logged in user_id
+function urlsForUser(id) {
+  let arr = [];
+
+  for (let url in urlDatabase) {
+  console.log(id, url.userID);
+    if (urlDatabase[url].userID === id) {
+      arr.push(url);
+    }
+  }
+
+  return arr;
+}
+
 /*----- GET ROUTES ------*/
 
-app.get('/', (req, res) => {
-  res.send('Hello!');
-});
-
-app.get('/urls.json', (req, res) => {
-  res.json(urlDatabase);
-});
 
 app.get('/urls', (req, res) => {
+  let myUrls = urlsForUser(req.cookies.user_id);
+  console.log(myUrls);
+
   let templateVars = {
-    urls: urlDatabase,
+    urls: myUrls,
     cookieName: users[req.cookies.user_id]
   };
   res.render('urls_index', templateVars);
