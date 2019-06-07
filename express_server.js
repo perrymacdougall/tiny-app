@@ -2,6 +2,7 @@
 const express = require('express');
 const app = express();
 const PORT = 8080; // default port 8080
+const bcrypt = require('bcrypt');
 
 // Set EJS as the templating engine
 app.set('view engine', 'ejs');
@@ -148,15 +149,17 @@ app.post('/urls/new', (req, res) => {
 
 // Handles login
 app.post('/login', (req, res) => {
+  console.log(users, req.body);
+  const passwordCheck = req.body.password;
 
-  //Checks to see if user exists
+  // Checks to see if user exists
   let userExists = emailLookup(req.body.email);
   // Creates a cookie for returning user
-  if (userExists && userExists.password === req.body.password) {
+  if (userExists && bcrypt.compareSync(passwordCheck, users[userExists.id].password)) {
     res.cookie('user_id', userExists.id);
     res.redirect('/urls')
   } else {
-    res.send('Error 403: Sorry, couldn\'t you find you in our pseudo-database')
+    res.send('Error 403: Sorry, couldn\'t find you in our pseudo-database')
   }
 });
 
@@ -179,7 +182,7 @@ app.post('/urls/:shortURL/delete', (req, res) => {
 
 // Updates the URL of an existing link
 app.post('/urls/:id', (req, res) => {
-  console.log(req.params, req.body, urlDatabase);
+
   // Checks if user is logged in with the correct user_id
   if (urlDatabase[req.params.id].userID === req.cookies.user_id) {
 
@@ -203,6 +206,8 @@ app.post('/urls/:id', (req, res) => {
 
 // Handles registration requests and creates a new user
 app.post('/register', (req, res) => {
+const password = req.body.password;
+const hashedPassword = bcrypt.hashSync(password, 10);
 
   // Checks if email and password are valid
   if (req.body.email === "" || req.body.password === "") {
@@ -219,9 +224,10 @@ app.post('/register', (req, res) => {
     users[newUser] = {
       id: newUser,
       email: req.body.email,
-      password: req.body.password
+      password: hashedPassword
     }
 
+    console.log(users);
     // Create a new cookie for new user
     res.cookie('user_id', users[newUser].id);
     res.redirect('/urls')
