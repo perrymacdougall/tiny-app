@@ -98,13 +98,13 @@ app.get('/urls/:shortURL', (req, res) => {
   };
 
   // Checks if user is logged in with the correct user_id
-  // if (urlDatabase[req.params.shortURL].userID === templateVars.cookieName) {
-  //   res.render('urls_show', templateVars);
-  // } else {
-  //   res.send("Please login first to view this URL");
-  // }
+  if (urlDatabase[req.params.shortURL].userID === req.cookies.user_id) {
+    res.render('urls_show', templateVars);
+  } else {
+    res.send("Please login first to view this URL");
+  }
 
-  res.render('urls_show', templateVars);
+  // res.render('urls_show', templateVars);
 });
 
 // Handles outbound redirect request
