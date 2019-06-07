@@ -53,16 +53,15 @@ const emailLookup = function(email) {
 
 // Filters URLs according to logged in user_id
 function urlsForUser(id) {
-  let arr = [];
+  let filteredUrls = {};
 
   for (let url in urlDatabase) {
-  console.log(id, url.userID);
     if (urlDatabase[url].userID === id) {
-      arr.push(url);
+      filteredUrls[url] = urlDatabase[url]
     }
   }
 
-  return arr;
+  return filteredUrls;
 }
 
 /*----- GET ROUTES ------*/
@@ -70,7 +69,6 @@ function urlsForUser(id) {
 
 app.get('/urls', (req, res) => {
   let myUrls = urlsForUser(req.cookies.user_id);
-  console.log(myUrls);
 
   let templateVars = {
     urls: myUrls,
