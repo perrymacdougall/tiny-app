@@ -119,11 +119,17 @@ app.get('/login', (req, res) => {
 
 /*---- POST ROUTES -----*/
 
-// Handles POST requests, generates a random alphanumeric string and writes the short/long pair to the urlDatabase
-app.post('/urls', (req, res) => {
+// Adds a new shortened url to the urlDatabase
+app.post('/urls/new', (req, res) => {
   const randomString = generateRandomString();
-  urlDatabase[randomString] = req.body.longURL;
-  res.redirect(`urls/${randomString}`);
+  urlDatabase[randomString] = {
+    longURL: req.body.longURL,
+    userID: req.cookies.user_id
+  }
+
+  console.log(urlDatabase);
+
+  res.redirect('/urls');
 });
 
 // Handles login
