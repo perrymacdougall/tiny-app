@@ -96,6 +96,14 @@ app.get('/urls/:shortURL', (req, res) => {
     longURL: urlDatabase[req.params.shortURL],
     cookieName: users[req.cookies.user_id]
   };
+
+  // Checks if user is logged in with the correct user_id
+  // if (urlDatabase[req.params.shortURL].userID === templateVars.cookieName) {
+  //   res.render('urls_show', templateVars);
+  // } else {
+  //   res.send("Please login first to view this URL");
+  // }
+
   res.render('urls_show', templateVars);
 });
 
@@ -133,8 +141,6 @@ app.post('/urls/new', (req, res) => {
     userID: req.cookies.user_id
   }
 
-  console.log(urlDatabase);
-
   res.redirect('/urls');
 });
 
@@ -166,9 +172,20 @@ app.post('/urls/:shortURL/delete', (req, res) => {
 
 // Updates the URL of an existing link
 app.post('/urls/:id', (req, res) => {
-  urlDatabase[req.params.id] = req.body.longURL;
+
+  // Updates longURL in database
+  urlDatabase[req.params.id].longURL = req.body.longURL;
+
+  let myUrls = urlsForUser(req.cookies.user_id);
+
+  let templateVars = {
+    urls: myUrls,
+    cookieName: users[req.cookies.user_id]
+  };
+
   res.redirect('/urls')
 });
+
 
 // Handles registration requests and creates a new user
 app.post('/register', (req, res) => {

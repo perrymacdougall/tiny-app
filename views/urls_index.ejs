@@ -5,9 +5,8 @@
     </header>
     <h6>Your URLs</h6>
       <ul>
-        <%
-        for (let x in urls) {%>
-          <li><%= urls[x].longURL %>: <a href='#'><%= x %></a>
+        <% for (let x in urls) {%>
+          <li><%= urls[x].longURL %>: <a href="<%= urls[x].longURL %>"><%= x %></a>&nbsp;<a href="/urls/<%= x %>">Edit</a>
             <form action="/urls/<%= x %>/delete" method="POST">
               <button type="submit">Delete</button>
             </form>
