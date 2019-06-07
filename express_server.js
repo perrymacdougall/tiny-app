@@ -91,12 +91,15 @@ app.get('/urls/new', (req, res) => {
 });
 
 app.get('/urls/:shortURL', (req, res) => {
+  let myUrls = urlsForUser(req.cookies.user_id);
+
   let templateVars = {
-    shortURL: req.params.shortURL,
-    longURL: urlDatabase[req.params.shortURL],
-    cookieName: users[req.cookies.user_id]
+    urls: myUrls,
+    cookieName: users[req.cookies.user_id],
+    page_id: req.params.shortURL
   };
 
+  console.log(templateVars);
   // Checks if user is logged in with the correct user_id
   if (urlDatabase[req.params.shortURL].userID === req.cookies.user_id) {
     res.render('urls_show', templateVars);
@@ -104,7 +107,6 @@ app.get('/urls/:shortURL', (req, res) => {
     res.send("Please login first to view this URL");
   }
 
-  // res.render('urls_show', templateVars);
 });
 
 // Handles outbound redirect request
@@ -166,24 +168,36 @@ app.post('/logout', (req, res) => {
 
 // Handles a DELETE request
 app.post('/urls/:shortURL/delete', (req, res) => {
-  delete urlDatabase[req.params.shortURL];
-  res.redirect('/urls')
+  // Checks if user is logged in with the correct user_id
+  if (urlDatabase[req.params.shortURL].userID === req.cookies.user_id) {
+    delete urlDatabase[req.params.shortURL];
+    res.redirect('/urls')
+  } else {
+    res.send("Please login first to remove this URL");
+  }
 });
 
 // Updates the URL of an existing link
 app.post('/urls/:id', (req, res) => {
+  console.log(req.params, req.body, urlDatabase);
+  // Checks if user is logged in with the correct user_id
+  if (urlDatabase[req.params.id].userID === req.cookies.user_id) {
 
-  // Updates longURL in database
-  urlDatabase[req.params.id].longURL = req.body.longURL;
+    // Updates longURL in database
+    urlDatabase[req.params.id].longURL = req.body.longURL;
 
-  let myUrls = urlsForUser(req.cookies.user_id);
+    let myUrls = urlsForUser(req.cookies.user_id);
 
-  let templateVars = {
-    urls: myUrls,
-    cookieName: users[req.cookies.user_id]
-  };
+    let templateVars = {
+      urls: myUrls,
+      cookieName: users[req.cookies.user_id]
+    };
 
-  res.redirect('/urls')
+    res.redirect('/urls')
+  } else {
+    res.send("Please login first to edit this URL");
+  }
+
 });
 
 
