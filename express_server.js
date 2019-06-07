@@ -78,10 +78,16 @@ app.get('/urls', (req, res) => {
 });
 
 app.get('/urls/new', (req, res) => {
-  let templateVars = {
-    cookieName: users[req.cookies.user_id]
+  // Checks to see if user is logged in
+  // If not, user is redirected to login page
+  if (req.cookies.user_id) {
+    let templateVars = {
+      cookieName: users[req.cookies.user_id]
+    }
+    res.render('urls_new', templateVars);
+  } else {
+    res.render('urls_login');
   }
-  res.render('urls_new', templateVars);
 });
 
 app.get('/urls/:shortURL', (req, res) => {
