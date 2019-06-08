@@ -86,6 +86,21 @@ function protocolChecker(input) {
 
 /*----- GET ROUTES ------*/
 
+app.get('/', (req, res) => {
+  // Checks to see if user is logged in
+  // If not, user is redirected to login page
+  if (req.session.user_id) {
+    let myUrls = urlsForUser(req.session.user_id);
+    let templateVars = {
+      urls: myUrls,
+      cookieName: users[req.session.user_id]
+    }
+    res.render('urls_index', templateVars);
+  } else {
+    res.render('urls_login');
+  }
+});
+
 
 app.get('/urls', (req, res) => {
   let myUrls = urlsForUser(req.session.user_id);
