@@ -17,7 +17,12 @@ const urlDatabase = {
 
 // Object containing my data store of users
 const users = {
-
+  // One default user for evaluation purposes
+  '7cde89':
+    { id: '7cde89',
+      email: 'light@lighthouse.com',
+      password: '$2b$10$DPBfPXqwVxniGzLWaiWl1uJN2LXe5Ng.ae9/Tbxj0fvp3CL58XLzi'
+    }
 }
 
 /*----- Middleware ----------*/
@@ -59,6 +64,24 @@ function urlsForUser(id) {
   }
 
   return filteredUrls;
+}
+
+// Protocol checker
+function protocolChecker(input) {
+  let longURL = input.split("");
+  let protocol = [];
+
+  for (let i = 0; i < 7; i++) {
+    protocol.push(longURL[i]);
+  }
+
+  let checker = protocol.join("");
+
+  if (checker !== 'http://') {
+    return false;
+  } else {
+    return true;
+  }
 }
 
 /*----- GET ROUTES ------*/
@@ -134,13 +157,20 @@ app.get('/login', (req, res) => {
 
 // Adds a new shortened url to the urlDatabase
 app.post('/urls/new', (req, res) => {
-  const randomString = generateRandomString();
-  urlDatabase[randomString] = {
-    longURL: req.body.longURL,
-    userID: req.session.user_id
+  // Error handling for missing http protocol
+  let longURL = protocolChecker(req.body.longURL);
+
+  if (longURL) {
+    const randomString = generateRandomString();
+    urlDatabase[randomString] = {
+      longURL: req.body.longURL,
+      userID: req.session.user_id
+    }
+    res.redirect('/urls');
+  } else {
+    res.send('Please don\'t forget the http:// please!');
   }
 
-  res.redirect('/urls');
 });
 
 // Handles login

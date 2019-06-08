@@ -3,7 +3,6 @@
     <header>
       <% include partials/_header %>
     </header>
-    <h6>Your URLs</h6>
       <ul>
         <% for (let x in urls) {%>
           <li><%= urls[x].longURL %>: <a href="<%= urls[x].longURL %>"><%= x %></a>&nbsp;<a href="/urls/<%= x %>">Edit</a>
