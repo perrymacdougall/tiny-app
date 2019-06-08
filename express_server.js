@@ -134,7 +134,6 @@ app.get('/urls/:shortURL', (req, res) => {
     page_id: req.params.shortURL
   };
 
-  console.log(templateVars);
   // Checks if user is logged in with the correct user_id
   if (urlDatabase[req.params.shortURL].userID === req.session.user_id) {
     res.render('urls_show', templateVars);
@@ -190,7 +189,6 @@ app.post('/urls/new', (req, res) => {
 
 // Handles login
 app.post('/login', (req, res) => {
-  console.log(users, req.body);
   const passwordCheck = req.body.password;
 
   // Checks to see if user exists
@@ -268,7 +266,6 @@ const hashedPassword = bcrypt.hashSync(password, 10);
       password: hashedPassword
     }
 
-    console.log(users);
     // Create a new cookie for new user
     req.session.user_id = users[newUser].id;
     res.redirect('/urls')
