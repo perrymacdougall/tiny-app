@@ -20,4 +20,8 @@ TinyApp is a full stack web application built using Node and Express that allows
 
 ## Final Project
 
-!["Screenshot of URLs page"]
+!["Screenshot of URLs page"](https://github.com/perrymacdougall/tiny-app/blob/master/docs/sample-list-of-links.png)
+
+!["Screenshot of login page"](https://github.com/perrymacdougall/tiny-app/blob/master/docs/sample-login-page.png)
+
+!["Screenshot of short URL creation page"](https://github.com/perrymacdougall/tiny-app/blob/master/docs/shortURL-creation-page.png)
